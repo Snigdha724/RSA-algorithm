@@ -1,0 +1,60 @@
+n = 2841846541
+e = 2147483647
+public = (e,n)
+print("Public key (e,N) is: ",public)
+  
+def exp_func(u,v):
+    exp = bin(v)
+    #print(exp)
+    value = u
+ 
+    for j in range(3, len(exp)): 
+      value = value * value
+      #print(j)
+      if(exp[j:j+1]=='1'):
+        value = (value*u)%n
+        #print(n)
+    return value
+
+'''DECRYPTION ALGORITHM'''
+def decrypt(pub_key,c_text):
+    e,n=pub_key
+    txt=c_text.split(',')
+    x=''
+    m=0
+    t=[]
+    for i in txt:
+            i=i.replace(" ","")
+            b=exp_func(int(i),e)
+            m=b
+            j = hex(m)
+            kk = (j[2:])
+            lo = bytes.fromhex(kk).decode('utf-8')
+            t += lo
+    return t
+
+messag = input("Message to decrypt: ")
+
+dec_msg=decrypt(public,messag)
+print("Your decrypted message is:","".join(dec_msg))
+
+
+Output: 
+Public key (e,N) is:  (2147483647, 2841846541)
+Message to decrypt: 457522536,2083237871,1482738265,465163032,19825951,465163032,877211441
+---------------------------------------------------------------------------
+UnicodeDecodeError                        Traceback (most recent call last)
+<ipython-input-59-308f031de2e9> in <module>
+     36 messag = input("Message to decrypt: ")
+     37 
+---> 38 dec_msg=decrypt(public,messag)
+     39 print("Your decrypted message is:","".join(dec_msg))
+
+<ipython-input-59-308f031de2e9> in decrypt(pub_key, c_text)
+     30             j = hex(m)
+     31             kk = (j[2:])
+---> 32             lo = bytes.fromhex(kk).decode('utf-8')
+     33             t += lo
+     34     return t
+
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xed in position 3: unexpected end of data
